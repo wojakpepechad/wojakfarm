@@ -17,13 +17,13 @@ import {
 
 const chains = [
 	mainnet,
-	polygon,
+	/*polygon,
 	avalanche,
 	arbitrum,
 	bsc,
 	optimism,
 	gnosis,
-	fantom,
+	fantom,*/
 ];
 
 // 1. Get projectID at https://cloud.walletconnect.com
@@ -31,10 +31,10 @@ const chains = [
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || "";
 
 const metadata = {
-	name: "Next Starter Template",
-	description: "A Next.js starter template with Web3Modal v3 + Wagmi",
-	url: "https://web3modal.com",
-	icons: ["https://avatars.githubusercontent.com/u/37784886"],
+	name: "Wojak Far,",
+	description: "The home of the wojak.farm community - 0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4",
+	url: "https://wojak.farm",
+	icons: ["https://pbs.twimg.com/profile_images/1312314914392993792/AEEJkpQM_400x400.jpg"],
 };
 
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });

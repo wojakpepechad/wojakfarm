@@ -35,6 +35,18 @@
 	animation: animateGlow 5s linear infinite;
 }
 
+.wrapper li {
+    color: var(--color-grey-400);
+    line-height: 1.75;
+    list-style-type: none; /* This line removes the bullets */
+}
+
+/* If you have nested lists and only want to remove bullets for the top-level list items */
+.wrapper > ul > li {
+    list-style-type: none;
+}
+
+
 .content {
 	margin-top: 1.5rem;
 }
