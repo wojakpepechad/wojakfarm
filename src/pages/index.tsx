@@ -24,19 +24,20 @@ export default function Home() {
 	};
 	
 
-	function TokenBalanceComponent({ userAddress, contractAddress, contractABI }) {
+	
+	  function TokenBalanceComponent() {
 		const { data, isError, isLoading } = useContractRead({
-			address: contractAddress, // Your contract's address
-			abi: contractABI, // Your contract's ABI
+			address:  `0x${contractAddresses.wojak}`, // Your contract's address
+			abi: ABIWojak, // Your contract's ABI
 			functionName: 'balanceOf', // Replace with your contract's relevant function
-			args: [userAddress], // Arguments for the function call
+			args: [address], // Arguments for the function call
 		});
 	
 		if (isLoading) return <div>Loading...</div>;
 		if (isError) return <div>Error loading balance</div>;
 	
 		// Assuming the balance is returned as a BigNumber, convert it as needed
-		const balance = data ? parseFloat(formatUnits(data, 'ether')).toFixed(3) : '0.000';
+		const balance = data ? parseFloat(formatUnits(Number(data), 'ether')).toFixed(3) : '0.000';
 	
 		return (
 			<div>
@@ -175,7 +176,7 @@ export default function Home() {
                             <div className={styles.content}>
                                 <h2>Blockchain Info</h2>
                                 <p>Connected as: {address}</p>
-								<TokenBalanceComponent userAddress={address} contractAddress={contractAddresses.wojak} contractABI={ABIWojak} />
+								<TokenBalanceComponent />
                             </div>
                         ) : (
                             <div className={styles.content}>
