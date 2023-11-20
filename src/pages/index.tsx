@@ -6,7 +6,7 @@ import { useAccount, useConnect, useContractRead } from 'wagmi';
 import Link from 'next/link';
 import contractAddresses from '../contracts/addresses';
 import { ABIWojak } from '../contracts/ABIS';
-import { formatUnits } from "ethers";
+import { formatUnits, BigNumberish } from "ethers";
 
 
 
@@ -25,26 +25,28 @@ export default function Home() {
 	
 
 	
-	  function TokenBalanceComponent() {
+	function TokenBalanceComponent() {
 		const { data, isError, isLoading } = useContractRead({
-			address:  `0x${contractAddresses.wojak}`, // Your contract's address
+			address: "0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4", // Your contract's address
 			abi: ABIWojak, // Your contract's ABI
 			functionName: 'balanceOf', // Replace with your contract's relevant function
 			args: [address], // Arguments for the function call
 		});
-	
+
 		if (isLoading) return <div>Loading...</div>;
 		if (isError) return <div>Error loading balance</div>;
-	
+
 		// Assuming the balance is returned as a BigNumber, convert it as needed
-		const balance = data ? parseFloat(formatUnits(Number(data), 'ether')).toFixed(3) : '0.000';
-	
+		const balanceInWei = data || 0;
+		const formattedBalance: string = formatUnits(balanceInWei.toString(), 'ether');
+
 		return (
 			<div>
-				Wojak Balance: {balance}
+				Wojak Balance: {parseFloat(formattedBalance).toFixed(3)}
 			</div>
 		);
 	}
+
 	
 
 	return (
