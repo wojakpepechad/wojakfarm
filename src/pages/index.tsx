@@ -47,6 +47,15 @@ export default function Home() {
 		);
 	}
 
+	const DextChart = () => {
+		return (
+			<iframe id="dextools-widget"
+    title="DEXTools Trading Chart"
+    width="500" height="400"
+    src="https://www.dextools.io/widget-chart/es/ether/pe-light/0x20267b3c4148446f2647af96d320db88c383537f?theme=light&chartType=2&chartResolution=30&drawingToolbars=false"></iframe>
+		)
+	}
+
 	
 
 	return (
@@ -189,7 +198,7 @@ export default function Home() {
                         )}
                     </div>
                 </div>
-
+				<DextChart />
 			</main>
 		</>
 	);
