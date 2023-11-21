@@ -193,3 +193,16 @@ span.button:hover {
 		background-position: 200% 50%;
 	}
 }
+
+.chartSwapperContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Adjust the space between components */
+}
+
+@media (max-width: 600px) { /* Adjust the breakpoint as needed */
+    .chartSwapperContainer {
+        flex-direction: column;
+    }
+}

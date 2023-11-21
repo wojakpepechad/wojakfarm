@@ -4,17 +4,36 @@ import styles from "@/styles/Home.module.css";
 import { useState } from "react";
 import { useAccount, useConnect, useContractRead } from 'wagmi';
 import Link from 'next/link';
-import contractAddresses from '../contracts/addresses';
 import { ABIWojak } from '../contracts/ABIS';
 import { formatUnits, BigNumberish } from "ethers";
+import { SwapWidget } from '@uniswap/widgets'
+import '@uniswap/widgets/fonts.css'
 
+const MY_TOKEN_LIST = [
+    {
+    "name": "Wojak.farm",
+    "address": "0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4",
+    "symbol": "WOJAK",
+    "decimals": 18,
+    "chainId": 1,
+    "logoURI": "https://pbs.twimg.com/profile_images/1312314914392993792/AEEJkpQM_400x400.jpg"
+  },
+    {
+    "name": "Tether USD",
+    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "symbol": "USDT",
+    "decimals": 6,
+    "chainId": 1,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
+  },
+]
 
 
 
 export default function Home() {
 	const [isNetworkSwitchHighlighted, setIsNetworkSwitchHighlighted] = useState(false);
 	const [isConnectHighlighted, setIsConnectHighlighted] = useState(false);
-	
+
 	const { connector: activeConnector, isConnected, address } = useAccount()
 	const { connect, connectors, error, isLoading, pendingConnector } = useConnect()
 
@@ -22,9 +41,9 @@ export default function Home() {
 		setIsNetworkSwitchHighlighted(false);
 		setIsConnectHighlighted(false);
 	};
-	
 
-	
+
+
 	function TokenBalanceComponent() {
 		const { data, isError, isLoading } = useContractRead({
 			address: "0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4", // Your contract's address
@@ -50,13 +69,35 @@ export default function Home() {
 	const DextChart = () => {
 		return (
 			<iframe id="dextools-widget"
-    title="DEXTools Trading Chart"
-    width="500" height="400"
-    src="https://www.dextools.io/widget-chart/es/ether/pe-light/0x20267b3c4148446f2647af96d320db88c383537f?theme=light&chartType=2&chartResolution=30&drawingToolbars=false"></iframe>
+				title="DEXTools Trading Chart"
+				width="500" height="400"
+				src="https://www.dextools.io/widget-chart/es/ether/pe-light/0x20267b3c4148446f2647af96d320db88c383537f?theme=light&chartType=2&chartResolution=30&drawingToolbars=false"></iframe>
 		)
 	}
 
 	
+	const UniSwapper = () => {
+		const wojak = "0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4";
+		
+		// Define your custom token list URI (or use a predefined one)
+		const customTokenListUri = MY_TOKEN_LIST;
+		
+		const widgetConfig = {	  
+		  tokenList: customTokenListUri,
+		  
+		  // Other widget configuration options...
+		};
+	  
+		return (
+		  <div className="Uniswap">
+			<SwapWidget {...widgetConfig} defaultOutputTokenAddress={wojak} />
+		  </div>
+		);
+	  }
+	  
+
+
+
 
 	return (
 		<>
@@ -95,21 +136,19 @@ export default function Home() {
 					<div className={styles.buttons}>
 						<div
 							onClick={closeAll}
-							className={`${styles.highlight} ${
-								isNetworkSwitchHighlighted
+							className={`${styles.highlight} ${isNetworkSwitchHighlighted
 									? styles.highlightSelected
 									: ``
-							}`}
+								}`}
 						>
 							<w3m-network-button />
 						</div>
 						<div
 							onClick={closeAll}
-							className={`${styles.highlight} ${
-								isConnectHighlighted
+							className={`${styles.highlight} ${isConnectHighlighted
 									? styles.highlightSelected
 									: ``
-							}`}
+								}`}
 						>
 							<w3m-button />
 						</div>
@@ -182,23 +221,27 @@ export default function Home() {
 					</div>
 				</div>
 				<div className={styles.wrapper}>
-                    <div className={styles.container}>
-                        {isConnected ? (
-                            <div className={styles.content}>
-                                <h2>Blockchain Info</h2>
-                                <p>Connected as: {address}</p>
+					<div className={styles.container}>
+						{isConnected ? (
+							<div className={styles.content}>
+								<h2>Blockchain Info</h2>
+								<p>Connected as: {address}</p>
 								<TokenBalanceComponent />
-                            </div>
-                        ) : (
-                            <div className={styles.content}>
-                                <h2>Connect to Blockchain</h2>
-                                <p>Please connect to view blockchain information.</p>
-                                {/* Render connect button or logic */}
-                            </div>
-                        )}
-                    </div>
+							</div>
+						) : (
+							<div className={styles.content}>
+								<h2>Connect to Blockchain</h2>
+								<p>Please connect to view blockchain information.</p>
+								{/* Render connect button or logic */}
+							</div>
+						)}
+					</div>
+				</div>
+                <div className={styles.chartSwapperContainer}>
+                    <DextChart />
+                    <UniSwapper />
                 </div>
-				<DextChart />
+
 			</main>
 		</>
 	);

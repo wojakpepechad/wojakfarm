@@ -31,7 +31,7 @@ const chains = [
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || "";
 
 const metadata = {
-	name: "Wojak Far,",
+	name: "Wojak Farm",
 	description: "The home of the wojak.farm community - 0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4",
 	url: "https://wojak.farm",
 	icons: ["https://pbs.twimg.com/profile_images/1312314914392993792/AEEJkpQM_400x400.jpg"],
