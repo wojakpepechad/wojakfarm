@@ -114,15 +114,6 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<header>
-				<div
-					className={styles.backdrop}
-					style={{
-						opacity:
-							isConnectHighlighted || isNetworkSwitchHighlighted
-								? 1
-								: 0,
-					}}
-				/>
 				<div className={styles.header}>
 					<div className={styles.logo}>
 						<Image
@@ -134,25 +125,10 @@ export default function Home() {
 						<span> wojak.farm</span>
 					</div>
 					<div className={styles.buttons}>
-						<div
-							onClick={closeAll}
-							className={`${styles.highlight} ${isNetworkSwitchHighlighted
-									? styles.highlightSelected
-									: ``
-								}`}
-						>
+
 							<w3m-network-button />
-						</div>
-						<div
-							onClick={closeAll}
-							className={`${styles.highlight} ${isConnectHighlighted
-									? styles.highlightSelected
-									: ``
-								}`}
-						>
 							<w3m-button />
 						</div>
-					</div>
 				</div>
 			</header>
 			<main className={styles.main}>
@@ -163,38 +139,6 @@ export default function Home() {
 							<ul>
 								<li>
 									Welcome to wojak.farm. The oldest WOJAK community on Ethereum!
-								</li>
-								<li>
-									Click{" "}
-									<span
-										onClick={() => {
-											setIsConnectHighlighted(
-												!isConnectHighlighted
-											);
-											setIsNetworkSwitchHighlighted(
-												false
-											);
-										}}
-										className={styles.button}
-									>
-										Connect Wallet
-									</span>{" "}
-									to connect your Ethereum wallet.
-								</li>
-								<li>
-									Click{" "}
-									<span
-										onClick={() => {
-											setIsNetworkSwitchHighlighted(
-												!isNetworkSwitchHighlighted
-											);
-											setIsConnectHighlighted(false);
-										}}
-										className={styles.button}
-									>
-										Select Network
-									</span>{" "}
-									to change networks if you are on not on the most OG network, ETHEREUM!
 								</li>
 							</ul>
 						</div>
@@ -220,23 +164,7 @@ export default function Home() {
 						</Link>
 					</div>
 				</div>
-				<div className={styles.wrapper}>
-					<div className={styles.container}>
-						{isConnected ? (
-							<div className={styles.content}>
-								<h2>Blockchain Info</h2>
-								<p>Connected as: {address}</p>
-								<TokenBalanceComponent />
-							</div>
-						) : (
-							<div className={styles.content}>
-								<h2>Connect to Blockchain</h2>
-								<p>Please connect to view blockchain information.</p>
-								{/* Render connect button or logic */}
-							</div>
-						)}
-					</div>
-				</div>
+
                 <div className={styles.chartSwapperContainer}>
                     <DextChart />
                     <UniSwapper />
