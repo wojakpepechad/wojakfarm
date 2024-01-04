@@ -28,7 +28,34 @@ const MY_TOKEN_LIST = [
   },
 ]
 
-
+const SocialLinks = () => {
+    return (
+        <div className={styles.socialContainer}>
+            <div className={styles.row}>
+                <a href="https://twitter.com/wojakfarm" target="_blank" rel="noopener noreferrer">
+                    <Image width={50} height={50} src="/socials/x-logo.png" alt="Twitter" className={styles.logoImage} />
+                </a>
+                <a href="https://t.me/firstwojakdeployed" target="_blank" rel="noopener noreferrer">
+                    <Image width={50} height={50} src="/socials/telegram-logo.png" alt="Telegram" className={styles.logoImage} />
+                </a>
+                <a href="https://www.dextools.io/app/es/ether/pair-explorer/0x20267b3c4148446f2647af96d320db88c383537f" target="_blank" rel="noopener noreferrer">
+                    <Image width={50} height={50} src="/socials/dextools-logo.png" alt="Dextools" className={styles.logoImage} />
+                </a>
+            </div>
+            <div className={styles.row}>
+                <a href="https://app.uniswap.org/#/swap?outputCurrency=0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4" target="_blank" rel="noopener noreferrer">
+                    <Image width={50} height={50} src="/socials/uniswap-logo.png" alt="Uniswap" className={styles.logoImage} />
+                </a>
+                <a href="https://the-og-pepe.medium.com/" target="_blank" rel="noopener noreferrer">
+                    <Image width={50} height={50} src="/socials/medium-logo.png" alt="Medium" className={styles.logoImage} />
+                </a>
+                <a href="https://github.com/theogpepe/" target="_blank" rel="noopener noreferrer">
+                    <Image width={50} height={50} src="/socials/github-logo.png" alt="Medium" className={styles.logoImage} />
+                </a>
+            </div>
+        </div>
+    );
+};
 
 export default function Home() {
 	const [isNetworkSwitchHighlighted, setIsNetworkSwitchHighlighted] = useState(false);
@@ -141,6 +168,10 @@ export default function Home() {
 									Welcome to wojak.farm. The oldest WOJAK community on Ethereum!
 								</li>
 							</ul>
+							<div className={styles.socialContainer}>
+                    <SocialLinks />
+                </div>
+
 						</div>
 					</div>
 					<div className={styles.footer}>

@@ -206,3 +206,9 @@ span.button:hover {
         flex-direction: column;
     }
 }
+
+.socialContainer {
+	flex-basis: 66%;
+	border-radius: 15px;
+	margin: 10px;
+  }
