@@ -163,11 +163,15 @@ export default function Home() {
 					<div className={styles.container}>
 						<h1>Wojak.farm - WOJAK</h1>
 						<div className={styles.content}>
-							<ul>
-								<li>
-									Welcome to wojak.farm. The oldest WOJAK community on Ethereum!
-								</li>
-							</ul>
+<div>
+	60% of WOJAK Supply is locked for 3 months, when it unlocks, it will be distributed as rewards to PEPE-LP stakers of swap.ogpepe.io
+</div>
+<div>
+    <a href="https://swap.ogpepe.io/#/add/ETH/0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4" target="_blank" rel="noopener noreferrer">
+        Add ETH/WOJAK and ETH/PEPE to start preparing for the farming
+    </a>
+</div>
+
 							<div className={styles.socialContainer}>
                     <SocialLinks />
                 </div>
