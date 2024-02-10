@@ -10,7 +10,7 @@ const DextChart = () => {
         <iframe id="dextools-widget"
             title="DEXTools Trading Chart"
             width="500" height="400"
-            src="https://www.dextools.io/widget-chart/es/ether/pe-light/0x20267b3c4148446f2647af96d320db88c383537f?theme=light&chartType=2&chartResolution=30&drawingToolbars=false"></iframe>
+            src="https://www.dextools.io/widget-chart/es/ether/pe-light/0x115f10b50314677f8e50189ff588533873e867e7?theme=light&chartType=2&chartResolution=30&drawingToolbars=false"></iframe>
     )
 }
 
