@@ -75,6 +75,7 @@ const ButtonLink = styled.a`
   color: white;
   text-align: center;
   border-radius: 5px;
+  border: 1px solid #ffff00;
   text-decoration: none;
   font-size: 16px;
   cursor: pointer;
@@ -127,7 +128,8 @@ export default function Home() {
 		  <Title>
 			<Logo>
 			  <Image src="/logo.jpg" alt="WojakFarm Logo" height="32" width="32" />
-			  <LogoText>Wojak.farm - WOJAK</LogoText>
+			  <LogoText>Wojak.farm</LogoText>
+			  <LogoText>Stake WOJAK, Earn PEPE</LogoText>
 			</Logo>
 		  </Title>
 		  <ButtonLink href="https://etherscan.io/address/0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4" target="_blank" rel="noopener noreferrer">
@@ -137,7 +139,10 @@ export default function Home() {
           Add ETH/WOJAK and ETH/PEPE to start preparing for the farming
         </ButtonLink>
         <ButtonLink as="a" href="/info">
-          Check out the full information here
+          Info
+        </ButtonLink>
+		<ButtonLink as="a" href="/charts">
+          Charts
         </ButtonLink>
 		  <SocialLinks />
 		</MainContainer>
