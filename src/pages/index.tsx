@@ -96,7 +96,7 @@ const SocialLinks = () => {
         <SocialLink href="https://t.me/firstwojakdeployed" target="_blank" rel="noopener noreferrer">
           <SocialIcon src="/socials/telegram-logo.png" alt="Telegram" />
         </SocialLink>
-        <SocialLink href="https://www.dextools.io/app/es/ether/pair-explorer/0x20267b3c4148446f2647af96d320db88c383537f" target="_blank" rel="noopener noreferrer">
+        <SocialLink href="https://www.dextools.io/app/es/ether/pair-explorer/0x115f10b50314677f8e50189ff588533873e867e7" target="_blank" rel="noopener noreferrer">
           <SocialIcon src="/socials/dextools-logo.png" alt="Dextools" />
         </SocialLink>
       </SocialRow>
