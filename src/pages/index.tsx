@@ -231,7 +231,7 @@ export default function Home() {
   {/* First Block - Default order */}
   <ContentContainer>
     <DescriptionContainer>
-      <p>The internet's biggest meme is gonna be Ethereum's hottest meme coin! Doge was funny. Pepe and his gang were cool. But now it's time for the granddaddy of 'em all to make a comeback! Welcome the world wide web's MOST CHERISHED memetic icon!</p>
+      <p>The internet&apos;s biggest meme is gonna be Ethereum&apos;s hottest meme coin! Doge was funny. Pepe and his gang were cool. But now it&apos;s time for the granddaddy of &apos;em all to make a comeback! Welcome the world wide web&apos;s MOST CHERISHED memetic icon!</p>
     </DescriptionContainer>
     <GifContainer>
       <Gif src="/finger.gif" alt="Finger" />
@@ -240,8 +240,8 @@ export default function Home() {
   
   {/* Second Block - Reverse order on desktop */}
   <ContentContainer>
-  <DescriptionContainer>
-      <p>Wojak, also known as "Feels Guy," is a meme character that originated from the imageboard culture of the internet, particularly 4chan. The character first appeared in 2009 when a Polish user posted a black-and-white MS Paint drawing of a bald man with a somber expression on the German imageboard Krautchan. The drawing quickly gained popularity and was named "Wojak," which means "warrior" or "soldier" in Polish.</p>
+    <DescriptionContainer>
+      <p>Wojak, also known as &quot;Feels Guy,&quot; is a meme character that originated from the imageboard culture of the internet, particularly 4chan. The character first appeared in 2009 when a Polish user posted a black-and-white MS Paint drawing of a bald man with a somber expression on the German imageboard Krautchan. The drawing quickly gained popularity and was named &quot;Wojak,&quot; which means &quot;warrior&quot; or &quot;soldier&quot; in Polish.</p>
     </DescriptionContainer>
     <GifContainer>
       <Gif src="/frens.gif" alt="Frens" />
@@ -251,7 +251,7 @@ export default function Home() {
   {/* Third Block - Default order */}
   <ContentContainer>
     <DescriptionContainer>
-      <p>Wojak's simple yet expressive design made it versatile for depicting a wide range of emotions and situations, from sadness and nostalgia to existential dread and alienation. This versatility helped Wojak become a staple in internet meme culture, often used to represent feelings of disillusionment, frustration, and the struggles of modern life. As internet culture evolved, Wojak's character diversified into various versions, including "Doomer Wojak," "Boomer Wojak," and "NPC Wojak," each symbolizing different subcultures or social archetypes.</p>
+      <p>Wojak&apos;s simple yet expressive design made it versatile for depicting a wide range of emotions and situations, from sadness and nostalgia to existential dread and alienation. This versatility helped Wojak become a staple in internet meme culture, often used to represent feelings of disillusionment, frustration, and the struggles of modern life. As internet culture evolved, Wojak&apos;s character diversified into various versions, including &quot;Doomer Wojak,&quot; &quot;Boomer Wojak,&quot; and &quot;NPC Wojak,&quot; each symbolizing different subcultures or social archetypes.</p>
     </DescriptionContainer>
     <GifContainer>
       <Gif src="/mask.gif" alt="Mask" />
@@ -260,14 +260,15 @@ export default function Home() {
 
   {/* Fourth Block - Reverse order on desktop */}
   <ContentContainer>
-  <DescriptionContainer>
-      <p><strong>Wojak is your friend!</strong> $WOJAK is an Ethereum project that aims to celebrate everything that's fun and heartwarming about the legendary meme. Sure, there have been many Wojak tokens before, but trust us... they don't know Wojak as well as we do! Wojak is all about the feels. He became very popular because the mere sight of him makes people FEEL something. This is what we want to capture with our digital currency.</p>
+    <DescriptionContainer>
+      <p><strong>Wojak is your friend!</strong> $WOJAK is an Ethereum project that aims to celebrate everything that&apos;s fun and heartwarming about the legendary meme. Sure, there have been many Wojak tokens before, but trust us... they don&apos;t know Wojak as well as we do! Wojak is all about the feels. He became very popular because the mere sight of him makes people FEEL something. This is what we want to capture with our digital currency.</p>
     </DescriptionContainer>
     <GifContainer>
       <Gif src="/hug.gif" alt="Hug" />
     </GifContainer>
   </ContentContainer>
 </WojakDescription>
+
 
 
       </MainContainer>
