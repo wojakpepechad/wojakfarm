@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
-	transpilePackages: ['@uniswap/widgets', '@uniswap/conedison'],
+	output: 'export',
+	images: {
+		unoptimized: true,
+	},
+	compiler: {
+		styledComponents: true,
+	},
 };
 
 module.exports = nextConfig;

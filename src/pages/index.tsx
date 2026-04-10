@@ -1,277 +1,526 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styled from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
+import { useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
+import Layout from '@/components/Layout';
+import { theme } from '@/styles/theme';
 
-const MainContainer = styled.div`
-  padding: 20px;
+const CONTRACT = '0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4';
+const SUPPLY = 11000;
+
+function useTokenPrice() {
+  const [price, setPrice] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchPrice = () =>
+      fetch(`https://api.geckoterminal.com/api/v2/simple/networks/eth/token_price/${CONTRACT}`)
+        .then((r) => r.json())
+        .then((d) => {
+          const raw = d?.data?.attributes?.token_prices?.[CONTRACT.toLowerCase()];
+          if (raw) setPrice(parseFloat(raw));
+        })
+        .catch(() => {});
+    fetchPrice();
+    const id = setInterval(fetchPrice, 60000);
+    return () => clearInterval(id);
+  }, []);
+
+  return price;
+}
+
+function formatUsd(n: number) {
+  if (n >= 1) return '$' + n.toFixed(2);
+  return '$' + n.toPrecision(4);
+}
+
+function formatMcap(n: number) {
+  if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(2) + 'M';
+  if (n >= 1_000) return '$' + (n / 1_000).toFixed(1) + 'K';
+  return '$' + n.toFixed(0);
+}
+
+// ─── Animations ──────────────────────────────────────────
+const float = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+`;
+
+const glowPulse = keyframes`
+  0%, 100% { box-shadow: 0 0 20px rgba(245, 197, 24, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(245, 197, 24, 0.2); }
+`;
+
+const blink = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+`;
+
+const gradientShift = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+// ─── Hero ────────────────────────────────────────────────
+const HeroSection = styled.section`
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 48px 0 32px;
 `;
 
-const Logo = styled.div`
+const HeroTitle = styled.h1`
+  font-family: ${theme.fonts.heading};
+  font-size: 56px;
+  color: ${theme.colors.wojakYellow};
+  margin-bottom: 12px;
+  line-height: 1.1;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 36px;
+  }
+`;
+
+const HeroSubtitle = styled.p`
+  font-size: 20px;
+  color: ${theme.colors.textSecondary};
+  max-width: 520px;
+  margin: 0 auto 28px;
+  line-height: 1.5;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 16px;
+  }
+`;
+
+const HeroTagline = styled.div`
+  font-family: ${theme.fonts.heading};
+  font-size: 24px;
+  background: linear-gradient(135deg, ${theme.colors.wojakYellow}, ${theme.colors.wojakGreen}, ${theme.colors.wojakBlue});
+  background-size: 200% 200%;
+  animation: ${gradientShift} 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 32px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 18px;
+  }
+`;
+
+// ─── Buttons ─────────────────────────────────────────────
+const ButtonRow = styled.div`
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  gap: 12px;
   flex-wrap: wrap;
+  margin-bottom: 24px;
 `;
 
+const Button = styled.a<{ $variant?: 'primary' | 'secondary' }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: ${theme.radii.md};
+  font-family: ${theme.fonts.heading};
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  ${(p) =>
+    p.$variant === 'primary'
+      ? `
+    background: ${theme.colors.wojakYellow};
+    color: ${theme.colors.bg};
+    border: 1px solid ${theme.colors.wojakYellow};
+
+    &:hover {
+      background: ${theme.colors.wojakGold};
+      box-shadow: ${theme.shadows.glow};
+      transform: translateY(-1px);
+    }
+  `
+      : `
+    background: transparent;
+    color: ${theme.colors.textPrimary};
+    border: 1px solid ${theme.colors.border};
+
+    &:hover {
+      border-color: ${theme.colors.wojakYellow};
+      color: ${theme.colors.wojakYellow};
+      transform: translateY(-1px);
+    }
+  `}
+`;
+
+// ─── Social Links ────────────────────────────────────────
 const SocialRow = styled.div`
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
 `;
-
-const Title = styled.h1`
-  font-size: 32px;
-  color: #ffff00;
-  font-family: 'DK Frozen Memory', sans-serif;
-
-  @media (max-width: 768px) {
-    font-size: 24px;
-  }
-`;
-
-const ButtonLink = styled.a`
-  display: inline-block;
-  margin: 10px;
-  padding: 10px 20px;
-  border: 1px solid #ccc;
-  background-color: #eee;
-  color: #333;
-  text-decoration: none;
-  border-radius: 5px;
-  font-family: 'DK Frozen Memory', sans-serif;
-  &:hover {
-    background-color: #ddd;
-  }
-
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-`;
-
-
-const ContentContainer = styled.div`
-  display: flex;
-  width: 100%;
-  margin-bottom: 20px;
-  flex-direction: column; // Default to vertical stacking
-
-  @media (min-width: 1024px) { // Adjust breakpoint as needed for larger screens
-    flex-direction: row; // Switch to row layout on larger screens
-    justify-content: space-between;
-    &:nth-child(odd) {
-      flex-direction: row-reverse; // Reverse order for alternating layout
-    }
-  }
-`;
-
-const Gif = styled.img`
-  width: 100%;
-  max-width: 500px; // Ensures GIFs are not too large on bigger screens
-  min-width: 300px; // Ensures GIFs have a minimum width
-  @media (max-width: 1023px) {
-    margin-bottom: 20px; // Adds spacing between stacked items on smaller screens
-  }
-`;
-
-
-const WojakDescription = styled.div`
-  margin-top: 20px;
-  padding: 20px;
-  background: #ffff80;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  font-size: 22px;
-  color: #ffff00;
-  line-height: 1.6;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-    padding: 15px;
-  }
-`;
-
-const SocialContainer = styled.div`
-  margin-top: 20px;
-`;
-
 
 const SocialLink = styled.a`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-const SocialIcon = styled.img`
-  width: 32px;
-  height: 32px;
+  transition: all 0.2s;
 
-  @media (max-width: 768px) {
-    width: 24px;
-    height: 24px;
+  &:hover {
+    transform: translateY(-2px);
   }
 `;
 
-const LogoText = styled.h1`
-  margin-left: 10px;
-  font-size: 24px;
-  color: #ffff00;
-  font-family: 'DK Frozen Memory', sans-serif;
+const SocialIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: ${theme.radii.md};
+  background: ${theme.colors.bgCard};
+  border: 1px solid ${theme.colors.border};
+  transition: all 0.2s;
+
+  ${SocialLink}:hover & {
+    border-color: ${theme.colors.wojakYellow};
+    background: rgba(245, 197, 24, 0.08);
+    box-shadow: ${theme.shadows.glow};
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  ${SocialLink}:hover & img {
+    opacity: 1;
+  }
 `;
 
-const DescriptionContainer = styled.div`
-padding: 20px;
-background-color: #333;
-border-radius: 8px;
-margin-bottom: 20px;
+const SocialLabel = styled.span`
+  font-size: 9px;
+  color: ${theme.colors.textMuted};
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
-const GifContainer = styled.div`
-  border-radius: 10px;
+const SocialLinkWrapper = styled.div`
+  position: relative;
+  padding-bottom: 14px;
+`;
+
+// ─── Content Cards ───────────────────────────────────────
+const StorySection = styled.section`
+  margin-top: 16px;
+`;
+
+const SectionTitle = styled.h2`
+  font-family: ${theme.fonts.heading};
+  font-size: 32px;
+  color: ${theme.colors.wojakYellow};
+  text-align: center;
+  margin-bottom: 40px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 24px;
+    margin-bottom: 28px;
+  }
+`;
+
+const ContentCard = styled.div<{ $reverse?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 32px;
+  margin-bottom: 24px;
+  background: ${theme.colors.bgCard};
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radii.lg};
+  transition: all 0.3s;
+  flex-direction: ${(p) => (p.$reverse ? 'row-reverse' : 'row')};
+
+  &:hover {
+    border-color: ${theme.colors.borderHover};
+    box-shadow: ${theme.shadows.cardHover};
+  }
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    flex-direction: column;
+    padding: 24px;
+    gap: 20px;
+  }
+`;
+
+const CardText = styled.div`
+  flex: 1;
+`;
+
+const CardTitle = styled.h3`
+  font-family: ${theme.fonts.heading};
+  font-size: 20px;
+  color: ${theme.colors.wojakYellow};
+  margin-bottom: 12px;
+`;
+
+const CardDescription = styled.p`
+  font-size: 15px;
+  line-height: 1.7;
+  color: ${theme.colors.textSecondary};
+`;
+
+const GifWrapper = styled.div`
+  flex-shrink: 0;
+  max-width: 320px;
+  border-radius: ${theme.radii.md};
   overflow: hidden;
-  margin-bottom: 20px;
-`;
+  animation: ${float} 4s ease-in-out infinite;
 
-
-const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: 'DK Frozen Memory';
-    src: url('/fonts/DKFrozenMemory.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
-  body {
-    font-family: 'DK Frozen Memory', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  *, *:before, *:after {
-    box-sizing: inherit;
-  }
-
-  @media (max-width: 768px) {
-    body {
-      font-size: 14px;
-    }
+  @media (max-width: ${theme.breakpoints.md}) {
+    width: 100%;
+    max-width: 300px;
   }
 `;
 
+// ─── Price Ticker ────────────────────────────────────────
+const TickerBar = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 16px 0 16px;
+  flex-wrap: wrap;
+`;
 
+const TickerItem = styled.div`
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 12px 24px;
+  background: ${theme.colors.bgCard};
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radii.md};
 
-// Component for social links
-const SocialLinks = () => {
-  return (
-    <SocialContainer>
-      <SocialRow>
-        <SocialLink href="https://twitter.com/wojakfarm" target="_blank" rel="noopener noreferrer">
-          <SocialIcon src="/socials/x-logo.png" alt="Twitter" />
-        </SocialLink>
-        <SocialLink href="https://t.me/firstwojakdeployed" target="_blank" rel="noopener noreferrer">
-          <SocialIcon src="/socials/telegram-logo.png" alt="Telegram" />
-        </SocialLink>
-        <SocialLink href="https://www.dextools.io/app/es/ether/pair-explorer/0x115f10b50314677f8e50189ff588533873e867e7" target="_blank" rel="noopener noreferrer">
-          <SocialIcon src="/socials/dextools-logo.png" alt="Dextools" />
-        </SocialLink>
-      </SocialRow>
-      <SocialRow>
-        <SocialLink href="https://app.uniswap.org/#/swap?outputCurrency=0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4" target="_blank" rel="noopener noreferrer">
-          <SocialIcon src="/socials/uniswap-logo.png" alt="Uniswap" />
-        </SocialLink>
-        <SocialLink href="https://the-og-pepe.medium.com/" target="_blank" rel="noopener noreferrer">
-          <SocialIcon src="/socials/medium-logo.png" alt="Medium" />
-        </SocialLink>
-        <SocialLink href="https://github.com/theogpepe/" target="_blank" rel="noopener noreferrer">
-          <SocialIcon src="/socials/github-logo.png" alt="GitHub" />
-        </SocialLink>
-      </SocialRow>
-    </SocialContainer>
-  );
-};
+  @media (max-width: ${theme.breakpoints.sm}) {
+    padding: 10px 16px;
+  }
+`;
 
+const TickerLabel = styled.span`
+  font-family: ${theme.fonts.mono};
+  font-size: 12px;
+  color: ${theme.colors.textMuted};
+  text-transform: uppercase;
+`;
 
+const TickerValue = styled.span`
+  font-family: ${theme.fonts.mono};
+  font-size: 22px;
+  font-weight: 700;
+  color: ${theme.colors.wojakGreen};
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 18px;
+  }
+`;
+
+const TickerLoading = styled.span`
+  font-family: ${theme.fonts.mono};
+  font-size: 22px;
+  font-weight: 700;
+  color: ${theme.colors.textMuted};
+  animation: ${blink} 1.2s ease-in-out infinite;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 18px;
+  }
+`;
+
+// ─── Stats Bar ───────────────────────────────────────────
+const StatsBar = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 0 0 40px;
+  animation: ${glowPulse} 3s ease-in-out infinite;
+  border-radius: ${theme.radii.lg};
+  padding: 24px;
+  background: ${theme.colors.bgCard};
+  border: 1px solid ${theme.colors.border};
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+`;
+
+const StatItem = styled.div`
+  text-align: center;
+`;
+
+const StatValue = styled.div`
+  font-family: ${theme.fonts.heading};
+  font-size: 26px;
+  color: ${theme.colors.wojakYellow};
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 20px;
+  }
+`;
+
+const StatLabel = styled.div`
+  font-size: 12px;
+  color: ${theme.colors.textMuted};
+  margin-top: 4px;
+`;
+
+// ─── Data ────────────────────────────────────────────────
+const socials = [
+  { href: 'https://twitter.com/wojakfarm', icon: '/socials/x-logo.svg', alt: 'Twitter', label: '' },
+  { href: 'https://t.me/firstwojakdeployed', icon: '/socials/telegram-logo.svg', alt: 'Telegram', label: '' },
+  { href: 'https://www.dextools.io/app/ether/pair-explorer/0x20267b3c4148446f2647af96d320db88c383537f', icon: '/socials/dextools-logo.svg', alt: 'Dextools v2', label: 'v2' },
+  { href: 'https://www.dextools.io/app/ether/pair-explorer/0x5c7f29e07a9af6cbb4bccbe8fe060067994f28a9', icon: '/socials/dextools-logo.svg', alt: 'Dextools v3', label: 'v3' },
+  { href: 'https://app.uniswap.org/#/swap?outputCurrency=0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4', icon: '/socials/uniswap-logo.svg', alt: 'Uniswap', label: '' },
+  { href: 'https://github.com/theogpepe/', icon: '/socials/github-logo.svg', alt: 'GitHub', label: '' },
+];
+
+const storyCards = [
+  {
+    title: 'yeah, that guy',
+    text: "you know him. you've seen him a million times. the bald dude with the sad eyes who shows up every time the market dumps. well guess what, he's got his own coin now. doge had its run. pepe had his moment. now it's wojak's turn and honestly? it was always his turn.",
+    gif: '/finger.gif',
+    alt: 'Finger',
+  },
+  {
+    title: 'where he came from',
+    text: "some polish dude drew a sad bald man in MS Paint back in 2009 and posted it on a german imageboard. that's it. that's the origin story. no corporate boardroom, no marketing team. just a guy, a feeling, and microsoft paint. the name \"wojak\" means \"warrior\" in polish which is honestly perfect because this guy has survived everything the internet has thrown at him.",
+    gif: '/frens.gif',
+    alt: 'Frens',
+  },
+  {
+    title: 'he became everyone',
+    text: "the thing about wojak is he's literally all of us. doomer wojak doom-scrolling at 3am. boomer wojak grilling. NPC wojak. bloomer wojak having a good day for once. there's a wojak for every vibe because the whole point was always about feelings. that's why he stuck around while other memes died.",
+    gif: '/mask.gif',
+    alt: 'Mask',
+  },
+  {
+    title: 'the FIRST. the REAL one.',
+    text: "if you're holding another wojak, you're holding a knockoff. $WOJAK started here. first on ethereum. first anywhere. not a fork, not a copy, not a \"v2\". the one that came before all of them. one day you'll tell people you were here when the original was still cheap. this is that moment.",
+    gif: '/hug.gif',
+    alt: 'Hug',
+  },
+];
+
+// ─── Component ───────────────────────────────────────────
 export default function Home() {
+  const price = useTokenPrice();
+  const mcap = price ? price * SUPPLY : null;
+
   return (
-    <>
-      <Head>
-        <title>Wojak.farm</title>
-        <meta name="description" content="The home of the wojak.farm community, the first Wojak token on Ethereum" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <GlobalStyle />
+    <Layout title="Wojak.farm - The First $WOJAK Ever">
+      <HeroSection>
+        <HeroTitle>wojak.farm</HeroTitle>
+        <HeroSubtitle>
+          the first token with the $WOJAK ticker. ever. on any chain. everyone else came after.
+        </HeroSubtitle>
+        <HeroTagline>The First $WOJAK Ever Created</HeroTagline>
 
-      <MainContainer>
-        <Logo>
-          <Image src="/logo.jpg" alt="WojakFarm Logo" height="32" width="32" />
-          <LogoText>Wojak.farm</LogoText>
-        </Logo>
-        <Title>Stake WOJAK, Earn PEPE</Title>
-        <SocialLinks />
-        <ButtonLink href="https://etherscan.io/address/0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4" target="_blank" rel="noopener noreferrer">
-          View on Etherscan
-        </ButtonLink>
-        <ButtonLink as="a" href="/info">
-          Info
-        </ButtonLink>
-        <ButtonLink as="a" href="/charts">
-          Charts
-        </ButtonLink>
-        <WojakDescription>
-  {/* First Block - Default order */}
-  <ContentContainer>
-    <DescriptionContainer>
-      <p>The internet&apos;s biggest meme is gonna be Ethereum&apos;s hottest meme coin! Doge was funny. Pepe and his gang were cool. But now it&apos;s time for the granddaddy of &apos;em all to make a comeback! Welcome the world wide web&apos;s MOST CHERISHED memetic icon!</p>
-    </DescriptionContainer>
-    <GifContainer>
-      <Gif src="/finger.gif" alt="Finger" />
-    </GifContainer>
-  </ContentContainer>
-  
-  {/* Second Block - Reverse order on desktop */}
-  <ContentContainer>
-    <DescriptionContainer>
-      <p>Wojak, also known as &quot;Feels Guy,&quot; is a meme character that originated from the imageboard culture of the internet, particularly 4chan. The character first appeared in 2009 when a Polish user posted a black-and-white MS Paint drawing of a bald man with a somber expression on the German imageboard Krautchan. The drawing quickly gained popularity and was named &quot;Wojak,&quot; which means &quot;warrior&quot; or &quot;soldier&quot; in Polish.</p>
-    </DescriptionContainer>
-    <GifContainer>
-      <Gif src="/frens.gif" alt="Frens" />
-    </GifContainer>
-  </ContentContainer>
+        <ButtonRow>
+          <Button
+            $variant="primary"
+            href="https://app.uniswap.org/#/swap?outputCurrency=0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Buy $WOJAK
+          </Button>
+          <Button
+            href="https://etherscan.io/address/0x4fd2EC9bDd398f8e522d76eA3704F8dBdc1f23f4"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Contract
+          </Button>
+          <Button href="/info">
+            Proof
+          </Button>
+        </ButtonRow>
 
-  {/* Third Block - Default order */}
-  <ContentContainer>
-    <DescriptionContainer>
-      <p>Wojak&apos;s simple yet expressive design made it versatile for depicting a wide range of emotions and situations, from sadness and nostalgia to existential dread and alienation. This versatility helped Wojak become a staple in internet meme culture, often used to represent feelings of disillusionment, frustration, and the struggles of modern life. As internet culture evolved, Wojak&apos;s character diversified into various versions, including &quot;Doomer Wojak,&quot; &quot;Boomer Wojak,&quot; and &quot;NPC Wojak,&quot; each symbolizing different subcultures or social archetypes.</p>
-    </DescriptionContainer>
-    <GifContainer>
-      <Gif src="/mask.gif" alt="Mask" />
-    </GifContainer>
-  </ContentContainer>
+        <SocialRow>
+          {socials.map((s) => (
+            <SocialLinkWrapper key={s.alt}>
+              <SocialLink href={s.href} target="_blank" rel="noopener noreferrer">
+                <SocialIcon>
+                  <img src={s.icon} alt={s.alt} />
+                </SocialIcon>
+              </SocialLink>
+              {s.label && <SocialLabel>{s.label}</SocialLabel>}
+            </SocialLinkWrapper>
+          ))}
+        </SocialRow>
+      </HeroSection>
 
-  {/* Fourth Block - Reverse order on desktop */}
-  <ContentContainer>
-    <DescriptionContainer>
-      <p><strong>Wojak is your friend!</strong> $WOJAK is an Ethereum project that aims to celebrate everything that&apos;s fun and heartwarming about the legendary meme. Sure, there have been many Wojak tokens before, but trust us... they don&apos;t know Wojak as well as we do! Wojak is all about the feels. He became very popular because the mere sight of him makes people FEEL something. This is what we want to capture with our digital currency.</p>
-    </DescriptionContainer>
-    <GifContainer>
-      <Gif src="/hug.gif" alt="Hug" />
-    </GifContainer>
-  </ContentContainer>
-</WojakDescription>
+      <TickerBar>
+        <TickerItem>
+          <TickerLabel>WOJAK/USD</TickerLabel>
+          {price ? <TickerValue>{formatUsd(price)}</TickerValue> : <TickerLoading>loading...</TickerLoading>}
+        </TickerItem>
+        <TickerItem>
+          <TickerLabel>MCAP</TickerLabel>
+          {mcap ? <TickerValue>{formatMcap(mcap)}</TickerValue> : <TickerLoading>loading...</TickerLoading>}
+        </TickerItem>
+        <TickerItem>
+          <TickerLabel>SUPPLY</TickerLabel>
+          <TickerValue>11,000</TickerValue>
+        </TickerItem>
+      </TickerBar>
 
+      <StatsBar>
+        <StatItem>
+          <StatValue>$WOJAK</StatValue>
+          <StatLabel>the original ticker</StatLabel>
+        </StatItem>
+        <StatItem>
+          <StatValue>Sept 2020</StatValue>
+          <StatLabel>deployed on ethereum</StatLabel>
+        </StatItem>
+        <StatItem>
+          <StatValue>First</StatValue>
+          <StatLabel>no earlier $WOJAK exists</StatLabel>
+        </StatItem>
+        <StatItem>
+          <StatValue>100%</StatValue>
+          <StatLabel>community owned</StatLabel>
+        </StatItem>
+      </StatsBar>
 
-
-      </MainContainer>
-    </>
+      <StorySection>
+        <SectionTitle>the lore</SectionTitle>
+        {storyCards.map((card, i) => (
+          <ContentCard key={i} $reverse={i % 2 === 1}>
+            <GifWrapper>
+              <img src={card.gif} alt={card.alt} />
+            </GifWrapper>
+            <CardText>
+              <CardTitle>{card.title}</CardTitle>
+              <CardDescription>{card.text}</CardDescription>
+            </CardText>
+          </ContentCard>
+        ))}
+      </StorySection>
+    </Layout>
   );
 }
